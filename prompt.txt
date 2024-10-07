@@ -1,0 +1,15 @@
+I want you to create a simple web page with HTML, CSS, and JavaScript that shows the user a random anime using the API endpoint given: 
+
+https://api.jikan.moe/v4/random/anime
+
+There should be a button, when clicked fetches the URL and displays the data. It should be disabled as the data is fetched, after 200 status code enable it again.
+
+You may use Bootstrap for styling and make sure it looks simple yet elegant.
+
+Make sure to that the page has all the following after fetching the URL:
+
+1. Image of the anime: href can be taken from data.images.jpg.image_url
+2. Title of the anime: data.title
+3. Anime type, source, episodes, status, duration, rating, score, scored_by, and synopsis. (all can be accessed within data.{attribute})
+
+Think carefully before writing any code.

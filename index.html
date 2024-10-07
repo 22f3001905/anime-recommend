@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Anime</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-mgH5cFCO6pN0wrBCrPHFlSXvPbMlV7x0tp4U6WcVmdvEcj07xnxCPvWTqV4DZQ3Q" crossorigin="anonymous">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding-top: 50px;
+    }
+
+    .anime-card {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .anime-img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .anime-details {
+      margin-top: 15px;
+    }
+
+    .anime-details p {
+      text-align: left;
+    }
+
+    #loading {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="text-center mb-4">Get a Random Anime</h1>
+    <div class="text-center">
+      <button id="fetchAnimeBtn" class="btn btn-primary">Fetch Another Anime</button>
+    </div>
+
+    <div id="loading" class="text-center mt-4">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div id="animeCard" class="anime-card mt-4 d-none">
+      <img id="animeImg" src="" alt="Anime Image" class="anime-img">
+      <h2 id="animeTitle" class="mt-3"></h2>
+      <div class="anime-details">
+        <p><strong>Type:</strong> <span id="animeType"></span></p>
+        <p><strong>Source:</strong> <span id="animeSource"></span></p>
+        <p><strong>Episodes:</strong> <span id="animeEpisodes"></span></p>
+        <p><strong>Status:</strong> <span id="animeStatus"></span></p>
+        <p><strong>Duration:</strong> <span id="animeDuration"></span></p>
+        <p><strong>Rating:</strong> <span id="animeRating"></span></p>
+        <p><strong>Score:</strong> <span id="animeScore"></span> (by <span id="animeScoredBy"></span> users)</p>
+        <p><strong>Synopsis:</strong> <span id="animeSynopsis"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fetchAnimeBtn = document.getElementById("fetchAnimeBtn");
+    const animeCard = document.getElementById("animeCard");
+    const loadingSpinner = document.getElementById("loading");
+
+    // Function to fetch anime and display it
+    function fetchAnime() {
+      fetchAnimeBtn.disabled = true;
+      loadingSpinner.style.display = "block";
+
+      fetch("https://api.jikan.moe/v4/random/anime")
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Network response was not ok');
+          }
+        })
+        .then(data => {
+          const anime = data.data;
+          document.getElementById("animeImg").src = anime.images.jpg.image_url;
+          document.getElementById("animeTitle").textContent = anime.title;
+          document.getElementById("animeType").textContent = anime.type;
+          document.getElementById("animeSource").textContent = anime.source;
+          document.getElementById("animeEpisodes").textContent = anime.episodes;
+          document.getElementById("animeStatus").textContent = anime.status;
+          document.getElementById("animeDuration").textContent = anime.duration;
+          document.getElementById("animeRating").textContent = anime.rating;
+          document.getElementById("animeScore").textContent = anime.score;
+          document.getElementById("animeScoredBy").textContent = anime.scored_by;
+          document.getElementById("animeSynopsis").textContent = anime.synopsis;
+
+          animeCard.classList.remove("d-none");
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+          alert("Failed to fetch anime. Please try again later.");
+        })
+        .finally(() => {
+          loadingSpinner.style.display = "none";
+          fetchAnimeBtn.disabled = false;
+        });
+    }
+
+    // Add event listener to the button
+    fetchAnimeBtn.addEventListener("click", fetchAnime);
+
+    // Fetch a random anime on page load
+    window.onload = fetchAnime;
+  </script>
+</body>
+
+</html>
